@@ -41,10 +41,9 @@ def login(request):
     errmsg = response_json.get("errmsg","")
     errcode = response_json.get("errcode")
 
-    obj = account.objects.filter(openid=response).first()
-    if obj:
-        request.session['openid'] = obj.openid
-        request.session['unionid'] = obj.unionid
+    if errcode==0:
+        request.session['openid'] = openid
+        request.session['unionid'] = unionid
         request.session.set_expiry(100000000)
         return JsonResponse({'openid': openid, 'unionid': unionid})
     else:
