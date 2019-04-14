@@ -45,11 +45,13 @@ def login(request):
         request.session['openid'] = openid
         request.session['unionid'] = unionid
         request.session.set_expiry(100000000)
-        return JsonResponse({"errmsg":"You are logged"})
+        return JsonResponse({"msg":"You are logged"})
     else:#errcode由微信api决定(auth code2session), https://developers.weixin.qq.com/miniprogram/dev/api-backend/auth.code2Session.html
         return JsonResponse({"errmsg": errmsg,"errcode":errcode}, status=404)
 
 def logout(request):
-    del request.session['openid']
-    del request.session['unionid']
-    return JsonResponse({"errmsg":"You are logged out"})
+    if request.session.exists('openid'):
+        del request.session['openid']
+    if request.session.exists('unionid'):
+        del request.session['unionid']
+    return JsonResponse({"msg":"You are logged out"})
