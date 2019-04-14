@@ -32,8 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'box',
-    'polls',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'login',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

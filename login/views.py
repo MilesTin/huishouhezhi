@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 import urllib.request
 import json
 
-from .models import account
-# Create your views here.
+
+
 
 
 def login(request):
@@ -45,11 +45,11 @@ def login(request):
         request.session['openid'] = openid
         request.session['unionid'] = unionid
         request.session.set_expiry(100000000)
-        return JsonResponse({'openid': openid, 'unionid': unionid})
-    else:
-        return JsonResponse({"errmsg": errmsg}, status=404)
+        return JsonResponse({"errmsg":"You are logged"})
+    else:#errcode由微信api决定(auth code2session), https://developers.weixin.qq.com/miniprogram/dev/api-backend/auth.code2Session.html
+        return JsonResponse({"errmsg": errmsg,"errcode":errcode}, status=404)
 
-
-
-
-
+def logout(request):
+    del request.session['openid']
+    del request.session['unionid']
+    return JsonResponse({"errmsg":"You are logged out"})
