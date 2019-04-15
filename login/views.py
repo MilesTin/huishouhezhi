@@ -20,7 +20,7 @@ def login(request):
     elif not code:
         errmsg+="登录code为空"
 
-    if  errmsg:
+    if errmsg:
         return JsonResponse({"errmsg":errmsg},status=404)
 
     #发送请求获得openid session_key unionid errcode errmsg
@@ -30,7 +30,7 @@ def login(request):
 
     headers = {'content-type':'application/json'}
 
-    R = urllib.request.Request(url=tencent_url,headers=headers)
+    R = urllib.request.Request(url=tencent_url,headers=headers)#接口成功只返回openid session_key
 
     response = urllib.request.urlopen(R).read()
 
@@ -41,9 +41,9 @@ def login(request):
     errmsg = response_json.get("errmsg","")
     errcode = response_json.get("errcode")
 
-    if errcode==0:
+    if not errcode:
         request.session['openid'] = openid
-        request.session['unionid'] = unionid
+        request.session['session_key'] = session_key
         request.session.set_expiry(100000000)
         return JsonResponse({"msg":"You are logged"})
     else:#errcode由微信api决定(auth code2session), https://developers.weixin.qq.com/miniprogram/dev/api-backend/auth.code2Session.html
@@ -52,6 +52,6 @@ def login(request):
 def logout(request):
     if request.session.exists('openid'):
         del request.session['openid']
-    if request.session.exists('unionid'):
-        del request.session['unionid']
+    if request.session.exists('session_key'):
+        del request.session['session_key']
     return JsonResponse({"msg":"You are logged out"})
