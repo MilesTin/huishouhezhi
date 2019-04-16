@@ -4,6 +4,7 @@ from django.http import JsonResponse,HttpResponse
 from .models import heZhi
 from django.forms.models import model_to_dict
 import json
+import datetime
 # Create your views here.
 
 
@@ -17,4 +18,53 @@ def getbox(request, boxId):
     obj = get_object_or_404(heZhi,pk=boxId)
     data = model_to_dict(obj)
     return JsonResponse(data, safe=False)
+
+def getLunchBoxCount(request):
+    try:
+        year = int(request.GET.get("year", 0))
+        month = int(request.GET.get("month", 0))
+        day = int(request.GET.get("day", 0))
+    except ValueError:
+        return JsonResponse({"errmsg": "未知错误"}, status=404)
+    #返回当天所有餐盒收集箱使用的餐盒数
+    if not year or not month or not day:
+        return JsonResponse({'errmsg':'year month or day字段缺失'},status=404)
+    try:
+        date = datetime.date(year,month,day)
+    except ValueError:
+        return JsonResponse({'errmsg':"invalid date {}/{}/{}".format(year,month,day)},status=404)
+    sum = 0
+
+    boxes = heZhi.objects.filter(date=date).values()
+    for box in boxes:
+        sum += box['lunchBoxCount']
+
+    return JsonResponse({'count':sum})
+
+def getSevenDayAvg(request):
+    try:
+        year = int(request.GET.get("year",0))
+        month = int(request.GET.get("month",0))
+        day = int(request.GET.get("day",0))
+    except ValueError:
+        return JsonResponse({"errmsg":"未知错误"},status=404)
+    if not year or not month or not day:
+        return JsonResponse({'errmsg':'year month or day字段缺失'},status=404)
+    try:
+        date = datetime.date(year,month,day)
+    except ValueError:
+        return JsonResponse({'errmsg':"invalid date {}/{}/{}".format(year,month,day)},status=404)
+
+    sum = 0
+    delta1Day = datetime.timedelta(-1)
+    for i in range(7):
+        data = getLunchBoxCount(request).content
+        dict_response = json.loads(data)
+        count = dict_response['count']
+        sum += count
+        date -= delta1Day
+    avg = sum/7
+    return JsonResponse({'boxAvg':avg,'boxSum':sum})
+
+
 

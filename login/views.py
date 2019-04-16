@@ -3,22 +3,16 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 import urllib.request
 import json
-
-
-
+from django.conf import settings
 
 
 def login(request):
-    appid = request.GET.get("appid","")
-    secret = request.GET.get("secret","")
+    appid = settings.APPID
+    secret = settings.SECRET
     code = request.GET.get("code","")
     errmsg = ""
-    if not appid:
-        errmsg+= "appid不能为空"
-    elif not secret:
-        errmsg+="秘钥secret不能为空"
-    elif not code:
-        errmsg+="登录code为空"
+    if not code:
+        errmsg += "code不存在"
 
     if errmsg:
         return JsonResponse({"errmsg":errmsg},status=404)
@@ -45,7 +39,7 @@ def login(request):
         request.session['openid'] = openid
         request.session['session_key'] = session_key
         request.session.set_expiry(100000000)
-        return JsonResponse({"msg":"You are logged"})
+        return JsonResponse({"msg":"You are logged in"})
     else:#errcode由微信api决定(auth code2session), https://developers.weixin.qq.com/miniprogram/dev/api-backend/auth.code2Session.html
         return JsonResponse({"errmsg": errmsg,"errcode":errcode}, status=404)
 
