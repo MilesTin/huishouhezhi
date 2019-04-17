@@ -70,7 +70,7 @@ def getSevenDayAvg(request):
         count = getBoxCount(date)
         sum += count
         boxes.append(count)
-        date -= delta1Day
+        date += delta1Day
     boxes.reverse()
     avg = sum/7
     return JsonResponse({'boxAvg':avg,'boxSum':sum,'boxes':boxes})
