@@ -19,6 +19,14 @@ def getbox(request, boxId):
     data = model_to_dict(obj)
     return JsonResponse(data, safe=False)
 
+def getBoxCount(date:datetime.date):
+    sum = 0
+
+    boxes = heZhi.objects.filter(date=date).values()
+    for box in boxes:
+        sum += box['lunchBoxCount']
+    return sum
+
 def getLunchBoxCount(request):
     try:
         year = int(request.GET.get("year", 0))
@@ -57,14 +65,15 @@ def getSevenDayAvg(request):
 
     sum = 0
     delta1Day = datetime.timedelta(-1)
+    boxes = []
     for i in range(7):
-        data = getLunchBoxCount(request).content
-        dict_response = json.loads(data)
-        count = dict_response['count']
+        count = getBoxCount(date)
         sum += count
+        boxes.append(count)
         date -= delta1Day
+    boxes.reverse()
     avg = sum/7
-    return JsonResponse({'boxAvg':avg,'boxSum':sum})
+    return JsonResponse({'boxAvg':avg,'boxSum':sum,'boxes':boxes})
 
 
 
