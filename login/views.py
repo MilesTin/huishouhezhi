@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 import urllib.request
 import json
 from django.conf import settings
-
+from .models import *
 
 def login(request):
     appid = settings.APPID
@@ -37,11 +37,16 @@ def login(request):
 
     if not errcode:
         request.session['openid'] = openid
+        if not user.objects.filter(openid=openid):#用户没有注册（登录过）
+            obj = user()
+            obj.openid = openid
+            obj.save()
         request.session['session_key'] = session_key
         request.session.set_expiry(100000000)
         return JsonResponse({"msg":"You are logged in"})
     else:#errcode由微信api决定(auth code2session), https://developers.weixin.qq.com/miniprogram/dev/api-backend/auth.code2Session.html
         return JsonResponse({"errmsg": errmsg,"errcode":errcode}, status=404)
+
 
 def logout(request):
     if request.session.exists('openid'):
@@ -49,3 +54,5 @@ def logout(request):
     if request.session.exists('session_key'):
         del request.session['session_key']
     return JsonResponse({"msg":"You are logged out"})
+
+

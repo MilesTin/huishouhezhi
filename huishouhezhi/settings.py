@@ -26,12 +26,16 @@ SECRET_KEY = 'sx(e)wqd_iy+jlhmu)+65=8-23gjupdb23u1(sl-*h+07dqjev'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-APPID = 'wx30d52e8e1353b6d1'
-SECRET = 'f13049935e0488bfed38aa08a579d2f0'
+#real
+# APPID = 'wx30d52e8e1353b6d1'
+# SECRET = 'f13049935e0488bfed38aa08a579d2f0'
+#TEST
+APPID = 'wxc84b45f5439e7c25'
+SECRET = 'a9a31ce69831dbbde20d5e99bbd6d671'
 # Application definition
 
 INSTALLED_APPS = [
+    'order',
     'box',
     'login',
     'django.contrib.admin',
