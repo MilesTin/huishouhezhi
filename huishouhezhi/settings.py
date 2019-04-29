@@ -27,11 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 #real
-APPID = 'wx30d52e8e1353b6d1'
-SECRET = 'f13049935e0488bfed38aa08a579d2f0'
+# APPID = 'wx30d52e8e1353b6d1'
+# SECRET = 'f13049935e0488bfed38aa08a579d2f0'
 #TEST
-# APPID = 'wxc84b45f5439e7c25'
-# SECRET = 'a9a31ce69831dbbde20d5e99bbd6d671'
+APPID = 'wxc84b45f5439e7c25'
+SECRET = 'a9a31ce69831dbbde20d5e99bbd6d671'
 # Application definition
 
 INSTALLED_APPS = [

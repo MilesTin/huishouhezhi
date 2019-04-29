@@ -17,8 +17,8 @@ def new_order(request):#必须先登录
 
     if not orderid:
         return JsonResponse({"msg":"餐盒id字段为空"},status=404)
-    if openid:
-        cur_user = get_object_or_404(user,openid=openid)
+
+    cur_user = get_object_or_404(user,openid=openid)
 
     if order.objects.filter(id=orderid,status=order.inCompleted) or order.objects.filter(id=orderid,status=order.needAdmin):
         return JsonResponse({'msg':'餐盒已有人使用'},status=404)
@@ -31,7 +31,7 @@ def new_order(request):#必须先登录
 def verif_order(request):
     #
     update_db()
-    openid = request.session.get("openid")
+    openid = request.GET.get("openid")
     orderid = request.GET.get('id')
 
     if not openid:
@@ -40,15 +40,15 @@ def verif_order(request):
     if not orderid:
         return JsonResponse({"msg": "餐盒id字段为空"}, status=404)
 
-    if openid:
-        cur_user = get_object_or_404(user, openid=openid)
+
+    cur_user = get_object_or_404(user, openid=openid)
 
     finded_order = get_object_or_404(order,user=cur_user,id=orderid,status=order.inCompleted)
 
     return JsonResponse({'exist':True})
 
 def order_complete(request):
-    openid = request.session.get("openid")
+    openid = request.GET.get("openid")
     orderid = request.GET.get('id')
 
     if not openid:
@@ -57,8 +57,7 @@ def order_complete(request):
     if not orderid:
         return JsonResponse({"msg": "餐盒id字段为空"}, status=404)
 
-    if openid:
-        cur_user = get_object_or_404(user, openid=openid)
+    cur_user = get_object_or_404(user, openid=openid)
 
     finded_order = get_object_or_404(order, user=cur_user, id=orderid, status=order.inCompleted)
     finded_order.status = order.completed
