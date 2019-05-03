@@ -7,4 +7,6 @@ urlpatterns = [
     path('getbox<int:boxId>/',views.getbox,name="getBox"),
     path('get7dayavg/',views.getSevenDayAvg,name="get7dayavg"),
     path("getboxcount/",views.getLunchBoxCount,name="getboxcount"),
+    path("cleanbox/",views.box_clean,name="cleanbox"),
+    path("space/",views.space,name="space")
 ]

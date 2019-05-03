@@ -75,5 +75,21 @@ def getSevenDayAvg(request):
     avg = sum/7
     return JsonResponse({'boxAvg':avg,'boxSum':sum,'boxes':boxes})
 
+#GET传入boxid
+def box_clean(request):
+    boxid = request.GET.get("boxid","")
+    cur_box = get_object_or_404(heZhi,id=boxid)
+    cur_box.space = None
+    cur_box.save()
+    return JsonResponse({"msg":"successful clean box"})
 
-
+def space(request):
+    """
+    :param request
+    GET 方法传入
+    boxid
+    :return:
+    """
+    boxid = request.GET.get("boxid","")
+    cur_box = get_object_or_404(heZhi,id=boxid)
+    return JsonResponse({"count":cur_box.space})

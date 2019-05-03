@@ -1,5 +1,6 @@
 from django.db import models
 from login.models import user
+from box.models import heZhi
 # Create your models here.
 class order(models.Model):
     inCompleted = 0
@@ -15,6 +16,7 @@ class order(models.Model):
     id = models.CharField(max_length=30,unique=True,primary_key=True)#餐盘id就行
     created_date = models.DateField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS_CHOICES)
-    user = models.ForeignKey(user,on_delete=models.CASCADE)
+    user = models.ForeignKey(user,on_delete=models.CASCADE,related_name="user_order")
+    box = models.ForeignKey(heZhi,default=None,related_name="box_order",on_delete=models.CASCADE)
     updated = models.DateTimeField(auto_now=True)
 

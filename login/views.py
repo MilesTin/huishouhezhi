@@ -5,6 +5,7 @@ import urllib.request
 import json
 from django.conf import settings
 from .models import *
+from order.models import *
 
 def login(request):
     appid = settings.APPID
@@ -55,4 +56,11 @@ def logout(request):
         del request.session['session_key']
     return JsonResponse({"msg":"You are logged out"})
 
+#需要登录
+def order_count(request):
+    openid = request.session.get("openid","")
 
+    cur_user = get_object_or_404(user,openid=openid)
+    #返回未完成的订单数
+    counts = len(cur_user.user_order.filter(status=order.inCompleted))
+    return JsonResponse({"count":counts})

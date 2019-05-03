@@ -47,20 +47,26 @@ def verif_order(request):
 
     return JsonResponse({'exist':True})
 
+#餐盒到回收箱
 def order_complete(request):
     openid = request.GET.get("openid")
     orderid = request.GET.get('id')
-
+    boxid = request.GET.get("boxid")
     if not openid:
-        redirect("/account/login")
+        return JsonResponse({"msg":"openid为空"},status=404)
 
     if not orderid:
         return JsonResponse({"msg": "餐盒id字段为空"}, status=404)
 
     cur_user = get_object_or_404(user, openid=openid)
-
+    cur_box = get_object_or_404(heZhi,id=boxid)
     finded_order = get_object_or_404(order, user=cur_user, id=orderid, status=order.inCompleted)
     finded_order.status = order.completed
+    finded_order.box = cur_box
+    #box要加个弄为默认
+
+    cur_box.space -= 1
+    cur_box.save()
     finded_order.save()
     return JsonResponse({"msg":"complete order successful"})
 
@@ -71,6 +77,7 @@ def update_db():
         if (today-cur_order.created_date) > timedel:
             if cur_order.status==order.inCompleted:
                 cur_order.status = order.needAdmin
+                cur_order.box = None
                 cur_order.save()
 
 
