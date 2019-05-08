@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 import urllib.request
 import json
+import datetime
 from django.conf import settings
 from .models import *
 from order.models import *
@@ -61,6 +62,38 @@ def order_count(request):
     openid = request.session.get("openid","")
 
     cur_user = get_object_or_404(user,openid=openid)
-    #返回未完成的订单数
-    counts = len(cur_user.user_order.filter(status=order.inCompleted))
+    #返回用户所有的订单数 包括3个状态
+    counts = len(cur_user.user_order.all())
     return JsonResponse({"count":counts})
+
+def days_sum(request):
+    openid = request.session.get("openid","")
+    cur_user = get_object_or_404(user, openid=openid)
+    sum = 0
+    for orderObj in order.objects.filter(user=cur_user):
+        endTime = orderObj.endedTime
+        createdTime = orderObj.created_date
+        if not endTime:
+            sum += (datetime.datetime.today().date() - createdTime).days
+        else:
+            sum += (endTime - createdTime).days
+
+    return JsonResponse({'count': sum})
+
+def enery_sum(request):
+    openid = request.session.get("openid", "")
+    cur_user = get_object_or_404(user, openid=openid)
+    return JsonResponse({"energy_saved":cur_user.energy_saved})
+
+def enery_unsaved(request):
+    openid = request.session.get("openid", "")
+    cur_user = get_object_or_404(user, openid=openid)
+    return JsonResponse({"energy_saved": cur_user.energy_saved})
+
+#回收能量池中能量到energy_saved
+def save_energy(request):
+    openid = request.session.get("openid", "")
+    cur_user = get_object_or_404(user, openid=openid)
+    cur_user.energy_saved += cur_user.energy_unsaved
+    cur_user.energy_unsaved = 0
+    return JsonResponse({'msg':"saved successful"})

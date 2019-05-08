@@ -17,6 +17,6 @@ class order(models.Model):
     created_date = models.DateField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS_CHOICES)
     user = models.ForeignKey(user,on_delete=models.CASCADE,related_name="user_order")
-    box = models.ForeignKey(heZhi,default=None,related_name="box_order",on_delete=models.CASCADE)
+    box = models.ForeignKey(heZhi,default=None,null=True,related_name="box_order",on_delete=models.CASCADE)
     updated = models.DateTimeField(auto_now=True)
-
+    endedTime = models.DateField(null=True)

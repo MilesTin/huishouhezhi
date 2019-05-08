@@ -5,6 +5,7 @@ from .models import heZhi
 from django.forms.models import model_to_dict
 import json
 import datetime
+from order.models import *
 # Create your views here.
 
 
@@ -80,6 +81,10 @@ def box_clean(request):
     boxid = request.GET.get("boxid","")
     cur_box = get_object_or_404(heZhi,id=boxid)
     cur_box.space = None
+    orders = order.objects.filter(box=cur_box)
+    for orderObject in orders:
+        orderObject.box = None
+    orderObject.save()
     cur_box.save()
     return JsonResponse({"msg":"successful clean box"})
 
