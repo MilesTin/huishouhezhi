@@ -94,6 +94,8 @@ def enery_unsaved(request):
 def save_energy(request):
     openid = request.session.get("openid", "")
     cur_user = get_object_or_404(user, openid=openid)
+    if cur_user.energy_unsaved<=0:
+        return JsonResponse({"msg":"没有能量值剩下了"},status=404)
     cur_user.energy_saved += cur_user.energy_unsaved
     cur_user.energy_unsaved = 0
     return JsonResponse({'msg':"saved successful"})

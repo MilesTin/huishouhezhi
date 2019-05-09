@@ -85,10 +85,10 @@ WSGI_APPLICATION = 'huishouhezhi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'huishouhezi',
+        'NAME': 'huishouhezhi',
         'USER' : 'root',
-        'PASSWORD' : 'E0D32c733d4f',
-        'HOST' : '119.23.27.180',
+        'PASSWORD' : 'tmzqq520..',
+        'HOST' : '129.28.140.83',
         'PORT' : '3306',
     }
 }

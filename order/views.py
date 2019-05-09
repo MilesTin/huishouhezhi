@@ -27,25 +27,25 @@ def new_order(request):#必须先登录
     new_order.save()
 
     return JsonResponse({'msg':'order is successful'})
-
-def verif_order(request):
-    #
-    update_db()
-    openid = request.GET.get("openid")
-    orderid = request.GET.get('id')
-
-    if not openid:
-        redirect("/account/login")
-
-    if not orderid:
-        return JsonResponse({"msg": "餐盒id字段为空"}, status=404)
-
-
-    cur_user = get_object_or_404(user, openid=openid)
-
-    finded_order = get_object_or_404(order,user=cur_user,id=orderid,status=order.inCompleted)
-
-    return JsonResponse({'exist':True})
+#
+# def verif_order(request):
+#     #
+#     update_db()
+#     openid = request.GET.get("openid")
+#     orderid = request.GET.get('id')
+#
+#     if not openid:
+#         redirect("/account/login")
+#
+#     if not orderid:
+#         return JsonResponse({"msg": "餐盒id字段为空"}, status=404)
+#
+#
+#     cur_user = get_object_or_404(user, openid=openid)
+#
+#     finded_order = get_object_or_404(order,user=cur_user,id=orderid,status=order.inCompleted)
+#
+#     return JsonResponse({'exist':True})
 
 #餐盒到回收箱
 def order_complete(request):

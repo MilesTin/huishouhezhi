@@ -84,7 +84,7 @@ def box_clean(request):
     orders = order.objects.filter(box=cur_box)
     for orderObject in orders:
         orderObject.box = None
-    orderObject.save()
+        orderObject.save()
     cur_box.save()
     return JsonResponse({"msg":"successful clean box"})
 
