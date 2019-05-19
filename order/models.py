@@ -19,4 +19,4 @@ class order(models.Model):
     user = models.ForeignKey(user,on_delete=models.CASCADE,related_name="user_order")
     box = models.ForeignKey(heZhi,default=None,null=True,related_name="box_order",on_delete=models.CASCADE)
     updated = models.DateTimeField(auto_now=True)
-    endedTime = models.DateField(null=True)
+    endedTime = models.DateField(null=True,blank=True)
