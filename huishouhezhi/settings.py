@@ -35,6 +35,7 @@ SECRET = 'f13049935e0488bfed38aa08a579d2f0'
 # Application definition
 
 INSTALLED_APPS = [
+    'feedback',
     'order',
     'box',
     'login',
